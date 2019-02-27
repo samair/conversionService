@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body>
+
+
+<div class="container">
+  <div class="page-header">
+    <h1>Forex & Trade </h1>      
+  
+  <div class="jumbotron">
+<div ng-app="myApp" ng-controller="formCtrl" ng-init="myVar = false" ng-init="qouteVar = false">
+  <form novalidate>
+    From Currency Type:<br>
+    <input type="text" ng-model="user.from"><br>
+    To Currency Type:<br>
+    <input type="text" ng-model="user.to">
+    <br><br>
+    <button ng-click="getQoute()" class="btn btn-success">GET QOUTE</button>
+  </form>
+  
+  <div ng-if="myVar" class="spinner-border m-5" role="status">
+  
+  </div>
+   <div ng-if="qouteVar" >
+  <p>{{qoute}}</p>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('formCtrl', function($scope,$http) {
+
+    $scope.getQoute = function() {
+	$scope.myVar=true;
+	$scope.qouteVar=false;
+	$http({
+		method : "GET",
+		url : "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=VMW&apikey=G5CXA85LO0ZJJ9PV"
+	}).then(function mySuccess(response) {
+	
+		$scope.myVar=false;
+		$scope.qouteVar=true;
+		$scope.qoute = response.data;
+
+	}, function myError(response) {
+		$scope.myVar=false;
+		$scope.qouteVar=true;
+		$scope.qoute = response.statusText;
+	});
+    
+    };
+
+});
+</script>
+ </body>
+</html>
