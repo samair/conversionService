@@ -9,6 +9,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.webvidhi.microservices.forex.conversionService.config.RibonConfig;
 
-
+@CrossOrigin
 @RestController
 public class CurrencyConvController {
 
@@ -29,7 +30,7 @@ public class CurrencyConvController {
     @Autowired
     RestTemplate restTemplate;
 	
-	
+    
 	@GetMapping("convertCurrency/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversion converCurrency(@PathVariable String from,@PathVariable String to ,@PathVariable BigDecimal quantity) {
 		
