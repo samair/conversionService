@@ -12,47 +12,85 @@
 <body>
 
 
-<div class="container">
+<div class="container" ng-app="myApp" ng-controller="formCtrl" ng-init="init()>
   <div class="page-header">
     <h1>Forex & Trade </h1>      
   
   <div class="jumbotron">
-<div ng-app="myApp" ng-controller="formCtrl" ng-init="myVar = false" ng-init="qouteVar = false">
-  <form novalidate>
-    From Currency Type:<br>
-    <input type="text" ng-model="user.from"><br>
-    To Currency Type:<br>
-    <input type="text" ng-model="user.to">
-    <br>
-    Quantity :<br>
-    <input type="text" ng-model="user.quantity">
-    <br><br>
-    <button ng-click="getQoute()" class="btn btn-success">GET QOUTE</button>
-  </form>
   
-  <div ng-if="myVar" class="spinner-border m-5" role="status">
-  
-  </div>
+  <div class="form-group row" ">
+
+  <div class="col-xs-2" >  
+    <label for="from"> From :</label>
+     <input id="from" class="form-control" type="text" ng-model="user.from">
+	</div>
+	
+	<div class="col-xs-2" > 
+    <label for="to"> To :</label>
+    <input id = "to" class="form-control" type="text" ng-model="user.to">
+    </div>
+	
+	<div class="col-xs-2" > 
+    <label for="quant"> Amount :</label>
+    <input id="quant" class="form-control"  type="text" ng-model="user.quantity">
+	</div>
+	
+
+ 
+   </div>  
+ 	<div>  
+	<button ng-click="convert()" class="btn btn-success">Convert</button>
+    </div>
+    <div ng-if="myVar" class="spinner-border m-5" role="status">
+	</div>
+	<br>
+	<br>
    <div ng-if="qouteVar" >
+   
   <p>{{qoute}}</p>
-   <p> {{user.from}}</p>
+  </div>
+ 
+  
+  <div ng-if="alert" class="alert alert-danger">
+    <strong>Error!</strong>{{qoute}}
+  </div>
   </div>
 </div>
 </div>
-</div>
+
+
+
 
 <script>
 var app = angular.module('myApp', []);
 app.controller('formCtrl', function($scope,$http) {
 
-    $scope.getQoute = function() {
+    $countryList = ["AUD","INR","USD"];  
+    
+	$scope.init= function(){
+    	$scope.myVar=false;
+	    $scope.qouteVar=false;
+		$scope.alert=false;
+	}
+	
+    $scope.convert = function() {
 	$scope.myVar=true;
 	$scope.qouteVar=false;
-        $conversionUrl = "http://localhost:8100/convertCurrency/from/";
-        $conversionUrlPostfix = "/to/INR/quantity/67";
+	$scope.alert=false;
+    $conversionUrl = "http://localhost:8100/convertCurrency/from/";
+    $conversionUrlPostfix = "/quantity/";
+    
+    if ($countryList.indexOf($scope.user.from) == -1 || $countryList.indexOf($scope.user.to) == -1 ){
+	
+	   $scope.myVar=false;
+	   $scope.alert=true;
+	   $scope.qoute=" Unsupported Currency Types!";
+	   return;
+	}
+	
 	$http({
-		method : "GET",
-                url : $conversionUrl+$scope.user.from+$conversionUrlPostfix
+			method : "GET",
+            url : $conversionUrl+$scope.user.from+"/to/"+$scope.user.to+$conversionUrlPostfix+$scope.user.quantity
 	}).then(function mySuccess(response) {
 	
 		$scope.myVar=false;
