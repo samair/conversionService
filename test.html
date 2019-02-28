@@ -23,6 +23,9 @@
     <input type="text" ng-model="user.from"><br>
     To Currency Type:<br>
     <input type="text" ng-model="user.to">
+    <br>
+    Quantity :<br>
+    <input type="text" ng-model="user.quantity">
     <br><br>
     <button ng-click="getQoute()" class="btn btn-success">GET QOUTE</button>
   </form>
@@ -32,6 +35,7 @@
   </div>
    <div ng-if="qouteVar" >
   <p>{{qoute}}</p>
+   <p> {{user.from}}</p>
   </div>
 </div>
 </div>
@@ -44,19 +48,21 @@ app.controller('formCtrl', function($scope,$http) {
     $scope.getQoute = function() {
 	$scope.myVar=true;
 	$scope.qouteVar=false;
+        $conversionUrl = "http://localhost:8100/convertCurrency/from/";
+        $conversionUrlPostfix = "/to/INR/quantity/67";
 	$http({
 		method : "GET",
-		url : "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=VMW&apikey=G5CXA85LO0ZJJ9PV"
+                url : $conversionUrl+$scope.user.from+$conversionUrlPostfix
 	}).then(function mySuccess(response) {
 	
 		$scope.myVar=false;
 		$scope.qouteVar=true;
-		$scope.qoute = response.data;
+		$scope.qoute = response.data.toalConvertedAmount;
 
 	}, function myError(response) {
 		$scope.myVar=false;
 		$scope.qouteVar=true;
-		$scope.qoute = response.statusText;
+		$scope.qoute = response;
 	});
     
     };
