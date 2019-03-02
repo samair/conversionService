@@ -1,4 +1,4 @@
-# conversionService
+# Currency Conversion Service
 [![Build Status](https://travis-ci.com/samair/conversionService.svg?branch=master)](https://travis-ci.com/samair/conversionService)
 
 A simple currency conversion service. 
